@@ -6,6 +6,7 @@ services:
     volumes:
       - komga-config:/config
       - /mnt/md0/documents/komgadata:/data
+      - /mnt/md0/media/downloads:/downloads
       - type: bind
         source: /etc/timezone #alternatively you can use a TZ environment variable, like TZ=Europe/London
         target: /etc/timezone

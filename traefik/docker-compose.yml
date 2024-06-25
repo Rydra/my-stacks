@@ -1,0 +1,65 @@
+version: "3.3"
+services:
+  traefik:
+    image: traefik
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      # The Web UI (enabled by --api.insecure=true in traefik.toml)
+      - 8080:8080
+      - 80:80
+      - 443:443
+      - 3001:3001
+      - 5055:5055
+      - 7359:7359/udp
+      - 8090:8090
+
+    volumes:
+      # So that Traefik can listen to the Docker events (read-only)
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # - /var/run/tailscale/tailscaled.sock:/var/run/tailscale/tailscaled.sock:ro
+      # - ./samantha.tailcffbb.ts.net.crt:/my.crt
+      # - ./samantha.tailcffbb.ts.net.key:/my.key
+    #   # TOML Configuration with global options
+      - ./config.yml:/config.yml
+      - ./traefik.yaml:/etc/traefik/traefik.yml
+      - traefik-le:/letsencrypt
+      # - traefik-cache:/cache
+      - ./plugins-local:/plugins-local
+    #   # Configuration for the file provider (needed for host networking and default TLS Options)
+    #   - /srv/traefik-provider.toml:/traefik-provider.toml
+    #   # LetsEncrypt ACME Configuration
+    #   - /srv/acme.json:/acme.json
+    #   # Log File (optional)
+    #   - /srv/traefik.log:/traefik.log
+    networks:
+      - mynetwork
+
+  # whoami:
+  #   image: "traefik/whoami"
+  #   container_name: "simple-service"
+  #   labels:
+  #     - traefik.enable=true
+  #     - traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)
+  #     - traefik.http.services.whoami.loadbalancer.server.port=80
+  #     - traefik.http.routers.whoami.entrypoints=web
+  #     # - traefik.http.routers.whoami.rule=Host(`samantha.tailcffbb.ts.net`)
+  #     # - traefik.http.routers.whoami.entrypoints=websecure
+  #     # - traefik.http.routers.whoami.tls=true
+  #     # - traefik.http.routers.whoami.tls.certresolver=acmeresolver
+  #     # - traefik.http.routers.whoami.tls.domains=whoami.localhost
+  #   networks:
+  #     - mynetwork
+
+
+volumes:
+  traefik-le:
+  traefik-cache:
+
+networks:
+  mynetwork:
+    external: true
+
+# Generate HASHED_ADMIN_USER_PASS using below command
+# htpasswd -B -C 10 -c .htpasswd user1
+# cat .htpasswd | sed -e s/\\$/\\$\\$/g

@@ -1,0 +1,23 @@
+version: "3"
+services:
+  metube:
+    image: ghcr.io/alexta69/metube
+    container_name: metube
+    restart: unless-stopped
+    # ports:
+    #   - "8081:8081"
+    volumes:
+      - /mnt/md0/media/youtube:/downloads
+    environment:
+      - URL_PREFIX=/metube
+    networks:
+      - mynetwork
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.metube.rule=PathPrefix(`/metube`)
+      - traefik.http.services.metube.loadbalancer.server.port=8081
+      - traefik.http.routers.metube.entrypoints=web
+
+networks:
+  mynetwork:
+    external: true

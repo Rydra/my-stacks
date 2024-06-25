@@ -1,0 +1,23 @@
+http:
+  middlewares:
+    default:
+      chain:
+        middlewares:
+          - gzip
+    http-cache:
+      plugin:
+    my-cache:
+      plugin:
+        cache:
+          path: /cache
+          maxExpiry: 1800
+          cleanup: 3600
+
+
+    # Enables the GZIP compression (https://docs.traefik.io/middlewares/compress/)
+    # if the response body is larger than 1400 bytes
+    # if the Accept-Encoding request header contains gzip
+    # if the response is not already compressed (Content-Encoding is not set)
+    # Use with traefik.http.routers.myRouter.middlewares: "gzip@file"
+    gzip:
+      compress: {}

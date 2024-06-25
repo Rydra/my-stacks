@@ -1,3 +1,12 @@
 *.tar
 immich/postgres
-.env
+*.env
+/metube/downloads
+/syncthing/syncfolder/.ash_history
+/syncthing/syncfolder
+/media-stack/jellyseerconfig
+/media-stack/docker-compose-nginx.yml
+/media-stack/docker-compose-swag.yml
+/media-stack/docker-compose.tdarr.yml
+/media-stack/docker-compose.fileflows.yml
+/media-stack/sonarr/custom-services.d

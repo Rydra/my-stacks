@@ -1,0 +1,20 @@
+version: '2.4'
+name: unmanic-stack
+services:
+ unmanic:
+   container_name: unmanic
+   image: josh5/unmanic:latest
+   ports:
+     - 8888:8888
+   environment:
+     - PUID=${PUID}
+     - PGID=${PGID}
+   volumes:
+     - unmanic-config:/config
+     - ${MEDIA_PATH}:/library
+     - unmanic-cache:/tmp/unmanic
+   devices:
+     - /dev/dri:/dev/dri
+volumes:
+  unmanic-config:
+  unmanic-cache:
